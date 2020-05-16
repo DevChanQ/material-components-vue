@@ -20,7 +20,7 @@ module.exports = {
     fab: path.resolve(components + '/fab/index.js'),
     'floating-label': path.resolve(components + '/floating-label/index.js'),
     'form-field': path.resolve(components + '/form-field/index.js'),
-    'grid-list': path.resolve(components + '/grid-list/index.js'),
+    //'grid-list': path.resolve(components + '/grid-list/index.js'),
     icon: path.resolve(components + '/icon/index.js'),
     'image-list': path.resolve(components + '/image-list/index.js'),
     'icon-button': path.resolve(components + '/icon-button/index.js'),
@@ -42,7 +42,9 @@ module.exports = {
     'text-field': path.resolve(components + '/text-field/index.js'),
     theme: path.resolve(components + '/theme/index.js'),
     'top-app-bar': path.resolve(components + '/top-app-bar/index.js'),
-    typography: path.resolve(components + '/typography/index.js')
+    typography: path.resolve(components + '/typography/index.js'),
+    
+    'autocomplete': path.resolve(components + '/autocomplete/index.js'),
   },
   module: {
     rules: [
@@ -61,7 +63,7 @@ module.exports = {
       {
         test: /\.(scss|css)$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          //MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {
@@ -76,8 +78,10 @@ module.exports = {
             loader: 'sass-loader',
             options: {
               sourceMap: false,
+              webpackImporter: false,
               sassOptions: {
-                includePaths: [components, nodeModules]
+                implementation: require('sass'),
+                includePaths: [components, 'node_modules']
               }
             }
           }

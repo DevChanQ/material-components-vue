@@ -5,70 +5,121 @@
     :style="widthStyle"
     @MDCSelect:change="onChange"
   >
-    <slot name="leadingIcon" />
-    <input
-      v-if="enhanced && name"
-      :name="name"
-      type="hidden"
-    >
-    <i class="mdc-select__dropdown-icon" />
-    <div
-      v-if="enhanced"
-      :id="selectedTextId"
-      aria-haspopup="listbox"
-      class="mdc-select__selected-text"
-      role="button"
-      :aria-labelledby="ariaLabelledBy"
-    />
-    <div
-      v-if="enhanced"
-      :style="widthStyle"
-      class="mdc-select__menu mdc-menu mdc-menu-surface"
-      role="listbox"
-    >
-      <ul class="mdc-list">
-        <li
+    <!-- <div class="mdc-select__anchor">
+      <span class="mdc-select__ripple"></span>
+      <span class="mdc-select__selected-text"></span>
+      <slot name="leadingIcon" />
+      <input
+        v-if="enhanced && name"
+        :name="name"
+        type="hidden"
+      >
+      <i class="mdc-select__dropdown-icon" />
+      <div
+        v-if="enhanced"
+        :id="selectedTextId"
+        aria-haspopup="listbox"
+        class="mdc-select__selected-text"
+        role="button"
+        :aria-labelledby="ariaLabelledBy"
+      />
+      <div
+        v-if="enhanced"
+        :style="widthStyle"
+        class="mdc-select__menu mdc-menu mdc-menu-surface"
+        role="listbox"
+      >
+        <ul class="mdc-list">
+          <li
+            v-if="!hasPreSelected"
+            aria-selected="true"
+            class="mdc-list-item mdc-list-item--selected"
+            data-value=""
+            role="option"
+          />
+          <slot />
+        </ul>
+      </div>
+      <select
+        v-else
+        class="mdc-select__native-control"
+        v-bind="$attrs"
+        :name="name"
+      >
+        <option
           v-if="!hasPreSelected"
-          aria-selected="true"
-          class="mdc-list-item mdc-list-item--selected"
-          data-value=""
-          role="option"
+          disabled
+          selected
+          value=""
         />
         <slot />
+      </select>
+      <div
+        v-if="outlined"
+        class="mdc-notched-outline"
+      >
+        <div class="mdc-notched-outline__leading" />
+        <div class="mdc-notched-outline__notch">
+          <slot name="label" />
+        </div>
+        <div class="mdc-notched-outline__trailing" />
+      </div>
+      <slot
+        v-else
+        name="label"
+      />
+      <slot
+        v-if="!outlined"
+        name="line"
+      />
+    </div> -->
+    <div class="mdc-select__anchor">
+      <span class="mdc-select__ripple"></span>
+      <span class="mdc-select__selected-text"></span>
+      <span class="mdc-select__dropdown-icon">
+        <svg
+            width="10px"
+            height="5px"
+            viewBox="7 10 10 5">
+          <polygon
+              class="mdc-select__dropdown-icon-inactive"
+              stroke="none"
+              fill-rule="evenodd"
+              points="7 10 12 15 17 10">
+          </polygon>
+          <polygon
+              class="mdc-select__dropdown-icon-active"
+              stroke="none"
+              fill-rule="evenodd"
+              points="7 15 12 10 17 15">
+          </polygon>
+        </svg>
+      </span>
+      <span class="mdc-notched-outline">
+        <span class="mdc-notched-outline__leading"></span>
+        <span class="mdc-notched-outline__trailing"></span>
+      </span>
+    </div>
+    <div class="mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth">
+      <ul class="mdc-list">
+        <li class="mdc-list-item mdc-list-item--selected" data-value="" aria-selected="true"></li>
+        <li class="mdc-list-item" data-value="grains">
+          <span class="mdc-list-item__text">
+            Bread, Cereal, Rice, and Pasta
+          </span>
+        </li>
+        <li class="mdc-list-item" data-value="vegetables">
+          <span class="mdc-list-item__text">
+            Vegetables
+          </span>
+        </li>
+        <li class="mdc-list-item" data-value="fruit">
+          <span class="mdc-list-item__text">
+            Fruit
+          </span>
+        </li>
       </ul>
     </div>
-    <select
-      v-else
-      class="mdc-select__native-control"
-      v-bind="$attrs"
-      :name="name"
-    >
-      <option
-        v-if="!hasPreSelected"
-        disabled
-        selected
-        value=""
-      />
-      <slot />
-    </select>
-    <div
-      v-if="outlined"
-      class="mdc-notched-outline"
-    >
-      <div class="mdc-notched-outline__leading" />
-      <div class="mdc-notched-outline__notch">
-        <slot name="label" />
-      </div>
-      <div class="mdc-notched-outline__trailing" />
-    </div>
-    <slot
-      v-else
-      name="label"
-    />
-    <slot
-      v-if="!outlined"
-      name="line"
-    />
   </div>
 </template>
 
