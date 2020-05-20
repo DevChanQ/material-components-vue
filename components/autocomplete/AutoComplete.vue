@@ -1,18 +1,7 @@
 <template>
   <!-- <div class="mdc-select mdc-select--outlined" @MDCSelect:change="onChange"> -->
-  <div class="material-autocomplete">
-    <!-- <div class="mdc-select__anchor material__autocomplete" aria-labelledby="outlined-select-label">
-      <input type="text" disabled readonly id="demo-selected-text" class="mdc-select__selected-text">
-      <i class="mdc-select__dropdown-icon"></i>
-      <span class="mdc-notched-outline">
-        <span class="mdc-notched-outline__leading"></span>
-        <span class="mdc-notched-outline__notch">
-          <span id="outlined-select-label" class="mdc-floating-label">Pick a Food Group</span>
-        </span>
-        <span class="mdc-notched-outline__trailing"></span>
-      </span>
-    </div> -->
-    <m-text-field :useNativeValidation="false" :valid="error ? false : true" :id="`material-autocomplete-text-field__${name}`" v-model="searchValue" outlined>
+  <div class="material-autocomplete mdc-menu-surface--anchor">
+    <m-text-field v-bind="$attrs" :useNativeValidation="false" :valid="error ? false : true" :id="`material-autocomplete-text-field__${name}`" v-model="searchValue" outlined>
       <m-floating-label :for="`material-autocomplete-text-field__${name}`">{{ display }}</m-floating-label>
     </m-text-field>
     <m-text-field-helper-line>
@@ -20,18 +9,30 @@
         {{ error || helperText }}
       </m-text-field-helper-text>
     </m-text-field-helper-line>
-    <div class="mdc-menu-surface--anchor" style="top: -19px;">
+    <!-- <div class="mdc-menu-surface--anchor" style="top: -19px;"> -->
       <div class="mdc-menu mdc-menu-surface material-autocomplete-menu" ref="menu" @MDCMenu:selected="onMenuSelected">
         <ul class="mdc-list">
           <!-- <li class="mdc-list-item mdc-list-item--selected" data-value="" aria-selected="true"></li> -->
-          <li class="mdc-list-item" :data-value="options" v-for="option in getOptions()" :key="option">
+          <template v-if="getOptions().length > 0">
+            <li class="mdc-list-item" :data-value="options" v-for="option in getOptions()" :key="option">
+              <span class="mdc-list-item__text">
+                {{ option }}
+              </span>
+            </li>
+          </template>
+          <li v-else-if="isPromisePending" class="mdc-list-item mdc-list-item--disabled">
             <span class="mdc-list-item__text">
-              {{ option }}
+              Loading Options
+            </span>
+          </li>
+          <li v-else class="mdc-list-item mdc-list-item--disabled">
+            <span class="mdc-list-item__text">
+              No Selectable Item
             </span>
           </li>
         </ul>
       </div>
-    </div>
+    <!-- </div> -->
   </div>
 </template>
 
@@ -64,10 +65,6 @@ export default {
       type: Boolean,
       default: false
     },
-    enhanced: {
-      type: Boolean,
-      default: false
-    },
     name: {
       type: String,
       default: ''
@@ -96,6 +93,7 @@ export default {
   methods: {
     instantiate () {
       this.mdcMenu = new MDCMenu(this.$refs['menu'])
+      this.mdcMenu.setAnchorMargin({top: 56})
     },
     onChange (event) {
       this.$emit('change', event.detail)
