@@ -1,7 +1,7 @@
 <template>
   <!-- <div class="mdc-select mdc-select--outlined" @MDCSelect:change="onChange"> -->
-  <div class="material-autocomplete mdc-menu-surface--anchor">
-    <m-text-field v-bind="$attrs" :useNativeValidation="false" :valid="error ? false : true" :id="`material-autocomplete-text-field__${name}`" v-model="searchValue" outlined>
+  <div class="material-autocomplete mdc-menu-surface--anchor" ref="menuAnchor">
+    <m-text-field v-bind="$attrs" @keydown.down.up="keyDown" :useNativeValidation="false" :valid="error ? false : true" :id="`material-autocomplete-text-field__${name}`" v-model="searchValue" outlined>
       <m-floating-label :for="`material-autocomplete-text-field__${name}`">{{ display }}</m-floating-label>
     </m-text-field>
     <m-text-field-helper-line>
@@ -43,17 +43,13 @@ import TextFieldHelperLine from '../text-field/TextFieldHelperLine'
 import FloatingLabel from '../floating-label/FloatingLabel'
 
 import {MDCMenu} from '@material/menu';
+import {MDCMenuSurface} from '@material/menu-surface';
+
 import { MDCComponent } from '@material/base/component'
 import { baseComponentMixin, themeClassMixin } from '../base'
 
 import fuzzy from 'fuzzysearch'
 import isPromise from 'is-promise'
-
-// const select = new MDCSelect(document.querySelector('.mdc-select'));
-
-// select.listen('MDCSelect:change', () => {
-//   alert(`Selected option at index ${select.selectedIndex} with value "${select.value}"`);
-// });
 
 export default {
   props: {
@@ -91,6 +87,16 @@ export default {
   },
   mixins: [baseComponentMixin, themeClassMixin],
   methods: {
+    keyDown (e) {
+      switch (e.key) {
+        case 'ArrowUp':
+          this.previousItem()
+          break;
+        case 'ArrowDown':
+          this.nextItem()
+          break;
+      }
+    },
     instantiate () {
       this.mdcMenu = new MDCMenu(this.$refs['menu'])
       this.mdcMenu.setAnchorMargin({top: 56})
@@ -123,6 +129,15 @@ export default {
       // filter function which filter options by string
       return this.options.filter(item => this.matchText(item))
     },
+    nextItem() {
+      console.log(this.mdcMenu)
+      if (this.current > this.mdcMenu.getMenuItemCount()) this.current = 0
+      else this.current += 1
+    },
+    previousItem() {
+      if (this.current < 0) this.current = this.mdcMenu.getMenuItemCount()
+      else this.current -= 1
+    }
   },
   mounted () {
     // this.updateSlots()
@@ -191,7 +206,9 @@ export default {
       selectedIndex: null,
 
       filteredAsyncOptions: [],
-      isPromisePending: false
+      isPromisePending: false,
+
+      current: 0,
     }
   },
   components: { 'm-text-field': TextField, 'm-floating-label': FloatingLabel, 'm-text-field-helper-text': TextFieldHelperText, 'm-text-field-helper-line': TextFieldHelperLine }
