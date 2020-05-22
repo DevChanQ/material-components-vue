@@ -13,11 +13,15 @@
       <div class="mdc-menu mdc-menu-surface material-autocomplete-menu" ref="menu" @MDCMenu:selected="onMenuSelected">
         <ul class="mdc-list">
           <!-- <li class="mdc-list-item mdc-list-item--selected" data-value="" aria-selected="true"></li> -->
-          <template v-if="getOptions().length > 0">
-            <li class="mdc-list-item" :data-value="options" v-for="option in getOptions()" :key="option">
-              <span class="mdc-list-item__text">
-                {{ option }}
-              </span>
+          <template  v-if="getOptions().length > 0">
+            <li>
+              <ul class="mdc-menu__selection-group">
+                <li class="mdc-list-item" role="menuitem" :data-value="options" v-for="option in getOptions()" :key="option">
+                  <span class="mdc-list-item__text">
+                    {{ option }}
+                  </span>
+                </li>
+              </ul>
             </li>
           </template>
           <li v-else-if="isPromisePending" class="mdc-list-item mdc-list-item--disabled">
@@ -88,18 +92,12 @@ export default {
   mixins: [baseComponentMixin, themeClassMixin],
   methods: {
     keyDown (e) {
-      switch (e.key) {
-        case 'ArrowUp':
-          this.previousItem()
-          break;
-        case 'ArrowDown':
-          this.nextItem()
-          break;
-      }
+      this.mdcMenu.foundation_.adapter_.focusListRoot()
     },
     instantiate () {
       this.mdcMenu = new MDCMenu(this.$refs['menu'])
       this.mdcMenu.setAnchorMargin({top: 56})
+      this.mdcMenu.setDefaultFocusState(0)
     },
     onChange (event) {
       this.$emit('change', event.detail)
@@ -130,12 +128,11 @@ export default {
       return this.options.filter(item => this.matchText(item))
     },
     nextItem() {
-      console.log(this.mdcMenu)
-      if (this.current > this.mdcMenu.getMenuItemCount()) this.current = 0
+      if (this.current >= this.mdcMenu.foundation_.adapter_.getMenuItemCount()-1) this.current = 0
       else this.current += 1
     },
     previousItem() {
-      if (this.current < 0) this.current = this.mdcMenu.getMenuItemCount()
+      if (this.current <= 0) this.current = this.mdcMenu.foundation_.adapter_.getMenuItemCount()-1
       else this.current -= 1
     }
   },
@@ -207,8 +204,6 @@ export default {
 
       filteredAsyncOptions: [],
       isPromisePending: false,
-
-      current: 0,
     }
   },
   components: { 'm-text-field': TextField, 'm-floating-label': FloatingLabel, 'm-text-field-helper-text': TextFieldHelperText, 'm-text-field-helper-line': TextFieldHelperLine }
