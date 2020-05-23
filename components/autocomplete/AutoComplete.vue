@@ -11,7 +11,7 @@
     </m-text-field-helper-line>
     <!-- <div class="mdc-menu-surface--anchor" style="top: -19px;"> -->
       <div class="mdc-menu mdc-menu-surface material-autocomplete-menu" ref="menu" @MDCMenu:selected="onMenuSelected">
-        <ul class="mdc-list">
+        <ul class="mdc-list" role="menu" aria-hidden="true" aria-orientation="vertical" tabindex="-1">
           <!-- <li class="mdc-list-item mdc-list-item--selected" data-value="" aria-selected="true"></li> -->
           <template  v-if="getOptions().length > 0">
             <li>

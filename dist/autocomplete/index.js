@@ -979,7 +979,7 @@ eval("\n\nfunction fuzzysearch (needle, haystack) {\n  var tlen = haystack.lengt
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = isPromise;\nmodule.exports.default = isPromise;\n\nfunction isPromise(obj) {\n  return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';\n}\n\n\n//# sourceURL=webpack:///./node_modules/is-promise/index.js?");
+eval("throw new Error(\"Module build failed: Error: ENOENT: no such file or directory, open '/Users/jeffrey1234ish/Documents/GitHub.nosync/EnkaiProject/enkai-material/node_modules/is-promise/index.js'\");\n\n//# sourceURL=webpack:///./node_modules/is-promise/index.js?");
 
 /***/ }),
 
