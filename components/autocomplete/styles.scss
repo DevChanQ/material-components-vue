@@ -1,16 +1,10 @@
-@import "@material/list/mdc-list";
-@import "@material/menu-surface/mdc-menu-surface";
-@import "@material/menu/mdc-menu";
-@import "@material/select/mdc-select";
+@use "@material/list/mdc-list";
+@use "@material/menu-surface/mdc-menu-surface";
+@use "@material/menu/mdc-menu";
 
-@import "../text-field/styles";
+@use "@material/floating-label/mdc-floating-label";
+@use "@material/line-ripple/mdc-line-ripple";
+@use "@material/notched-outline/mdc-notched-outline";
+@use "@material/textfield";
 
-
-.material-autocomplete {
-    width: 100%;
-    position: relative;
-}
-
-.material-autocomplete-menu {
-    width: 100%;
-}
+@include textfield.core-styles;

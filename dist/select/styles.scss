@@ -1,6 +1,6 @@
-@import "@material/list/mdc-list";
-@import "@material/menu-surface/mdc-menu-surface";
-@import "@material/menu/mdc-menu";
-@import "@material/select/mdc-select";
-@import "@material/notched-outline/mdc-notched-outline";
-@import "@material/select/helper-text/mdc-select-helper-text";
+@use "@material/list/mdc-list";
+@use "@material/menu-surface/mdc-menu-surface";
+@use "@material/menu/mdc-menu";
+@use "@material/select";
+
+@include select.core-styles();

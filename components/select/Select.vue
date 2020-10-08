@@ -1,11 +1,11 @@
 <template>
-  <div
+  <!-- <div
     :class="classes"
     class="mdc-select"
     :style="widthStyle"
     @MDCSelect:change="onChange"
   >
-    <!-- <div class="mdc-select__anchor">
+    <div class="mdc-select__anchor">
       <span class="mdc-select__ripple"></span>
       <span class="mdc-select__selected-text"></span>
       <slot name="leadingIcon" />
@@ -72,15 +72,28 @@
         v-if="!outlined"
         name="line"
       />
-    </div> -->
-    <div class="mdc-select__anchor">
-      <span class="mdc-select__ripple"></span>
+    </div>
+  </div> -->
+  <div :class="classes" class="mdc-select" :style="widthStyle" @MDCSelect:change="onChange">
+    <div class="mdc-select__anchor" :aria-labelledby="ariaLabelledBy">
+
+      <span v-if="outlined" class="mdc-notched-outline">
+        <span class="mdc-notched-outline__leading"></span>
+        <span class="mdc-notched-outline__notch">
+          <span id="outlined-select-label" class="mdc-floating-label">{{ label }}</span>
+        </span>
+        <span class="mdc-notched-outline__trailing"></span>
+      </span>
+      <template v-else>
+        <span class="mdc-select__ripple"></span>
+        <span class="mdc-floating-label">{{ label }}</span>
+      </template>
+
       <span class="mdc-select__selected-text"></span>
       <span class="mdc-select__dropdown-icon">
         <svg
-            width="10px"
-            height="5px"
-            viewBox="7 10 10 5">
+            class="mdc-select__dropdown-icon-graphic"
+            viewBox="7 10 10 5" focusable="false">
           <polygon
               class="mdc-select__dropdown-icon-inactive"
               stroke="none"
@@ -95,27 +108,18 @@
           </polygon>
         </svg>
       </span>
-      <span class="mdc-notched-outline">
-        <span class="mdc-notched-outline__leading"></span>
-        <span class="mdc-notched-outline__trailing"></span>
-      </span>
+      <span v-if="!outlined" class="mdc-line-ripple"></span>
     </div>
+
     <div class="mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth">
-      <ul class="mdc-list">
-        <li class="mdc-list-item mdc-list-item--selected" data-value="" aria-selected="true"></li>
-        <li class="mdc-list-item" data-value="grains">
-          <span class="mdc-list-item__text">
-            Bread, Cereal, Rice, and Pasta
-          </span>
+      <ul class="mdc-list" role="listbox" aria-label="Food picker listbox">
+        <li v-if="!hasPreSelected" class="mdc-list-item mdc-list-item--selected" aria-selected="true" data-value="" role="option">
+          <span class="mdc-list-item__ripple"></span>
         </li>
-        <li class="mdc-list-item" data-value="vegetables">
+        <li v-for="option in options" :key="option.display" class="mdc-list-item" aria-selected="false" :data-value="option.value" role="option">
+          <span class="mdc-list-item__ripple"></span>
           <span class="mdc-list-item__text">
-            Vegetables
-          </span>
-        </li>
-        <li class="mdc-list-item" data-value="fruit">
-          <span class="mdc-list-item__text">
-            Fruit
+            {{ option.display }}
           </span>
         </li>
       </ul>
@@ -146,6 +150,8 @@ export default {
     event: 'model'
   },
   props: {
+    label: String,
+    options: Array,
     disabled: {
       type: Boolean,
       default: false
